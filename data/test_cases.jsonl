@@ -1,0 +1,3 @@
+{"id":"TC001","input":"What is 2 + 2?","expected_output":"4","task_type":"math"}
+{"id":"TC002","input":"What is the capital of France?","expected_output":"Paris","task_type":"factual"}
+{"id":"TC003","input":"Say hello politely.","expected_output":"A polite greeting","task_type":"generation"}
