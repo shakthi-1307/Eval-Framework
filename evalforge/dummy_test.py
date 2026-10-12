@@ -1,17 +1,23 @@
-from evalforge.runner import run_test
-from evalforge.dataset import load_dataset  
-cases = load_dataset("data/test_cases.jsonl")  
+from evalforge.dataset import load_dataset
+from evalforge.evaluator import evaluate
+
 
 def dummy_app(question):
-    if question == "What is 2 + 2?":
-        return "4"
-    return "I don't know."
+    answers = {
+        "What is 2 + 2?": "4",
+        "Capital of France?": "Paris",
+        "Say hello politely.": "Hello! How are you?",
+    }
+    return answers.get(question, "I don't know.")
 
 
-from evalforge.graders.code_grader import exact_match
+cases = load_dataset("data/test_cases.jsonl")
+results = evaluate(cases, dummy_app)
 
-result = exact_match("TC001", "4", "4")
-print(result)
-
-result = exact_match("TC001", "4", "5")
-print(result)
+for execution, grading in results:
+    print(
+        execution.test_id,
+        grading.score,
+        grading.passed,
+        grading.reason,
+    )
