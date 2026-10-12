@@ -14,10 +14,14 @@ def dummy_app(question):
 cases = load_dataset("data/test_cases.jsonl")
 results = evaluate(cases, dummy_app)
 
-for execution, grading in results:
-    print(
-        execution.test_id,
-        grading.score,
-        grading.passed,
-        grading.reason,
-    )
+from evalforge.metrics import calculate_metrics
+
+metrics = calculate_metrics(results)
+
+print("\nEvaluation Summary")
+print("------------------")
+print("Total:", metrics.total_tests)
+print("Passed:", metrics.passed_tests)
+print("Failed:", metrics.failed_tests)
+print(f"Pass rate: {metrics.pass_rate:.2%}")
+print(f"Average latency: {metrics.average_latency_seconds:.6f}s")
