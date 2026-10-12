@@ -25,3 +25,9 @@ print("Passed:", metrics.passed_tests)
 print("Failed:", metrics.failed_tests)
 print(f"Pass rate: {metrics.pass_rate:.2%}")
 print(f"Average latency: {metrics.average_latency_seconds:.6f}s")
+
+from evalforge.storage import save_results
+
+file_path = save_results(results, metrics)
+
+print(f"\nResults saved to: {file_path}")
