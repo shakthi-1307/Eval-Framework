@@ -25,9 +25,21 @@ print("Passed:", metrics.passed_tests)
 print("Failed:", metrics.failed_tests)
 print(f"Pass rate: {metrics.pass_rate:.2%}")
 print(f"Average latency: {metrics.average_latency_seconds:.6f}s")
+print(f"Pass rate: {metrics.pass_rate:.2%}")
+print(
+    f"95% CI: {metrics.ci_lower:.2%} - "
+    f"{metrics.ci_upper:.2%}"
+)
 
 from evalforge.storage import save_results
 
 file_path = save_results(results, metrics)
 
 print(f"\nResults saved to: {file_path}")
+
+from evalforge.statistics import wilson_interval
+
+lower, upper = wilson_interval(passed=2, total=3)
+
+print(f"Pass rate: {2/3:.2%}")
+print(f"95% CI: {lower:.2%} - {upper:.2%}")

@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 from evalforge.runner import ExecutionResult
 from evalforge.graders.code_grader import GradingResult
+from evalforge.statistics import wilson_interval
 
 
 @dataclass
@@ -11,24 +12,36 @@ class EvaluationMetrics:
     passed_tests: int
     failed_tests: int
     pass_rate: float
+    ci_lower: float | None
+    ci_upper: float | None
     average_latency_seconds: float
 
 
 def calculate_metrics(results) -> EvaluationMetrics:
-    total = len(results)
+    # Execution errors are not valid grading outcomes.
+    valid_results = [
+        (execution, grading)
+        for execution, grading in results
+        if execution.error is None
+    ]
 
+    total = len(valid_results)
     passed = sum(
-        1 for execution, grading in results
+        1 for _, grading in valid_results
         if grading.passed
     )
-
     failed = total - passed
 
     pass_rate = passed / total if total else 0.0
 
+    if total:
+        ci_lower, ci_upper = wilson_interval(passed, total)
+    else:
+        ci_lower = ci_upper = None
+
     latencies = [
         execution.latency_seconds
-        for execution, grading in results
+        for execution, _ in results
         if execution.error is None
     ]
 
@@ -38,9 +51,12 @@ def calculate_metrics(results) -> EvaluationMetrics:
     )
 
     return EvaluationMetrics(
-        total_tests=total,
+        total_tests=len(results),
         passed_tests=passed,
         failed_tests=failed,
         pass_rate=pass_rate,
+        ci_lower=ci_lower,
+        ci_upper=ci_upper,
         average_latency_seconds=average_latency,
     )
+
