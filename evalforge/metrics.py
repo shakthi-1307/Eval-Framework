@@ -19,10 +19,12 @@ class EvaluationMetrics:
 
 def calculate_metrics(results) -> EvaluationMetrics:
     # Execution errors are not valid grading outcomes.
+    attempted = len(results)
+    
     valid_results = [
         (execution, grading)
         for execution, grading in results
-        if execution.error is None
+        if execution.error is None and grading is not None
     ]
 
     total = len(valid_results)
@@ -51,7 +53,7 @@ def calculate_metrics(results) -> EvaluationMetrics:
     )
 
     return EvaluationMetrics(
-        total_tests=len(results),
+        total_tests=attempted,
         passed_tests=passed,
         failed_tests=failed,
         pass_rate=pass_rate,
