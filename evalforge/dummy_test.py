@@ -1,31 +1,29 @@
+
+import json
+
 from evalforge.dataset import load_dataset
+from evalforge.graders.llm_grader import llm_grade
+
+
+def dummy_judge(prompt: str) -> str:
+    # Simulates a judge returning structured JSON.
+    return json.dumps({
+        "score": 0.95,
+        "passed": True,
+        "reason": "The response satisfies the grading criteria."
+    })
 
 
 cases = load_dataset("data/test_cases.jsonl")
 
-from evalforge.experiments import compare_version
+test_case = cases[2]
+actual_output = "Hello! How are you?"
 
-def version_a(question):
-    return "I don't know."
-
-def version_b(question):
-    answers = {
-        "What is 2 + 2?": "4",
-        "Capital of France?": "Paris",
-        "Say hello politely.": "A polite greeting",
-    }
-    return answers.get(question, "I don't know.")
-
-comparison = compare_version(cases, version_a, version_b)
-
-a = comparison["version_a"]["metrics"]
-b = comparison["version_b"]["metrics"]
-
-print("\nVersion Comparison")
-print("------------------")
-print(f"Version A: {a.pass_rate:.2%}")
-print(f"Version B: {b.pass_rate:.2%}")
-print(
-    "Improvement: "
-    f"{comparison['pass_rate_difference']:+.2%}"
+result = llm_grade(
+    test_case=test_case,
+    actual_output=actual_output,
+    judge=dummy_judge,
 )
+
+print(result)
+
