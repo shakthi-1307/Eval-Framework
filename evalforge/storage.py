@@ -5,7 +5,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 
 
-def save_results(results, metrics, output_dir="results"):
+def save_results(results, metrics, config=None,output_dir="results"):
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
@@ -13,11 +13,17 @@ def save_results(results, metrics, output_dir="results"):
         "run_id": datetime.now(timezone.utc).strftime(
             "%Y%m%dT%H%M%S%fZ"
         ),
+        "experiment_config": (
+            asdict(config) if config is not None else None 
+        ),
         "metrics": asdict(metrics),
         "results": [
             {
                 "execution": asdict(execution),
-                "grading": asdict(grading),
+                "grading": (
+                    asdict(grading)
+                    if grading is not None
+                    else None),
             }
             for execution, grading in results
         ],
