@@ -12,6 +12,8 @@ class ExecutionResult(BaseModel):
     test_id: str
     input: str
     actual_output: str | None = None 
+    expected_output:str | None = None
+    passed: bool | None = None
     error: str | None = None
     execution_time: float 
     timestamp: datetime = Field(
