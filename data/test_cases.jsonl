@@ -1,3 +1,0 @@
-{"test_id":"TC001","input":"What is 2 + 2?","expected_output":"4","tags":["math","basic"],"grading_criteria":"Check numerical correctness."}
-{"test_id":"TC002","input":"Capital of France?","expected_output":"Paris","tags":["geography"]}
-{"test_id":"TC003","input":"Say hello politely.","expected_output":"A polite greeting","tags":["generation"],"grading_criteria":"The greeting must be polite."}
