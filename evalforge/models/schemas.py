@@ -19,3 +19,13 @@ class ExecutionResult(BaseModel):
     timestamp: datetime = Field(
         default_factory = datetime.now
     )
+    
+class EvaluationReport(BaseModel):
+    dataset_name:str 
+    total_tests:int 
+    passed_tests:int
+    failed_tests:int
+    accuracy:float 
+    average_execution_time:float 
+    total_execution_time:float 
+    
