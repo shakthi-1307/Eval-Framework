@@ -16,9 +16,10 @@ class EvaluationRunner:
             try:
                 output = ai_application(test.input)
                 error = None 
-                passed = None
                 if test.expected_output is not None:
-                    passed = exact_match(output,test.expected_output)
+                    passed = exact_match(output.strip(),test.expected_output.strip())
+                else:
+                    passed = None
                 
             except Exception as e:
                 output = None 
@@ -32,7 +33,7 @@ class EvaluationRunner:
                 input = test.input,
                 actual_output = output,
                 expected_output = test.expected_output,
-                passedd = passed,
+                passed = passed,
                 error = error,
                 execution_time = execution_time,
             )
