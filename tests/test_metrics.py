@@ -35,3 +35,27 @@ def test_accuracy():
     
 def test_empty_results():
     assert calculate_accuracy([]) == 0.0
+    
+from evalforge.metrics.execution_errors import count_execution_errors
+
+
+def test_count_execution_errors():
+    results = [
+        ExecutionResult(
+            test_id="TC001",
+            input="Question 1",
+            actual_output="Answer",
+            passed=True,
+            execution_time=0.1,
+        ),
+        ExecutionResult(
+            test_id="TC002",
+            input="Question 2",
+            actual_output=None,
+            passed=False,
+            error="API timeout",
+            execution_time=0.2,
+        ),
+    ]
+
+    assert count_execution_errors(results) == 1

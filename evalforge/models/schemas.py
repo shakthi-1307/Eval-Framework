@@ -28,4 +28,5 @@ class EvaluationReport(BaseModel):
     accuracy:float 
     average_execution_time:float 
     total_execution_time:float 
+    error_count: int
     

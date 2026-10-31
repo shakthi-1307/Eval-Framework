@@ -1,5 +1,5 @@
 from evalforge.models.schemas import EvaluationReport
-
+from evalforge.metrics.execution_errors import count_execution_errors
 
 def generate_report(dataset_name, results):
 
@@ -26,6 +26,8 @@ def generate_report(dataset_name, results):
     accuracy = (
         passed / total if total > 0 else 0.0
     )
+    
+    error_count = count_execution_errors(results)
 
     return EvaluationReport(
         dataset_name=dataset_name,
@@ -34,5 +36,6 @@ def generate_report(dataset_name, results):
         failed_tests=failed,
         accuracy=accuracy,
         average_execution_time=average_time,
-        total_execution_time=total_time
+        total_execution_time=total_time,
+        error_count=error_count,
     )

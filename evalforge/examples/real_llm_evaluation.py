@@ -72,3 +72,7 @@ passed = llm_judge(
 )
 
 print("Judge verdict:", passed)
+
+from evalforge.reporting.exporter import export_report 
+
+export_report(report)
