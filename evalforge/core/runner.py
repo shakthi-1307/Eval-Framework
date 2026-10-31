@@ -8,8 +8,13 @@ class EvaluationRunner:
     def __init__(self,dataset:EvaluationDataset):
         self.dataset = dataset
         
-    def run(self,ai_application):
+    def run(self,ai_application,evaluator = None):
         results = []
+        
+        if evaluator is None:
+            evaluator = lambda test, output: contains_answer(
+                output, test.expected_output
+            )
         
         for test in self.dataset.test_cases:
             start_time = time.perf_counter()
@@ -18,7 +23,7 @@ class EvaluationRunner:
                 output = ai_application(test.input)
                 error = None 
                 if test.expected_output is not None:
-                    passed = contains_answer(output, test.expected_output)
+                    passed = evaluator(test,output)
                 else:
                     passed = None
                 

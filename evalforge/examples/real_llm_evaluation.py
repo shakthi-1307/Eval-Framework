@@ -3,6 +3,7 @@ from evalforge.models.schemas import TestCase
 from evalforge.core.dataset import EvaluationDataset 
 from evalforge.core.runner import EvaluationRunner
 from evalforge.reporting.report import generate_report 
+from evalforge.metrics.llm_judge import llm_judge
 
 llm = GroqLLM()
 
@@ -34,7 +35,15 @@ dataset.add_test_case(
 
 runner = EvaluationRunner(dataset)
 
-results = runner.run(llm.generate)
+results = runner.run(
+    ai_application = llm.generate,
+    evaluator = lambda test, output: llm_judge(
+        judge_model = llm,
+        question = test.input,
+        expected = test.expected_output,
+        actual = output,
+    ),
+)
 
 report = generate_report(
     dataset.name,
@@ -50,4 +59,16 @@ for result in results:
 print("\n============== EVALUATION REPORT ==================")
 
 print(report.model_dump_json(indent = 4))
-    
+
+print("\n============== LLM JUDGE ==================")
+
+actual = llm.generate("What is the capital of France?")
+
+passed = llm_judge(
+    judge_model=llm,
+    question="What is the capital of France?",
+    expected="Paris",
+    actual=actual,
+)
+
+print("Judge verdict:", passed)
