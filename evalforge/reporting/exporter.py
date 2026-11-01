@@ -4,10 +4,14 @@ from evalforge.reporting.report import EvaluationReport
 
 def export_report(
     report: EvaluationReport,
-    output_path: str = "reports/evaluation_report.json",
+    output_dir: str = "reports",
 ) -> None:
-    path = Path(output_path)
-    path.parent.mkdir(parents = True, exist_ok = True)
+    directory = Path(output_dir)
+    directory.mkdir(parents=True,exist_ok = True)
+    
+    timestamp = report.generated_at.strftime("%Y%m%d_%H%M%S")
+    filename = f"eval_{timestamp}_{report.run_id[:8]}.json"
+    path = directory/filename
     
     with path.open("w",encoding = "utf-8") as file:
         json.dump(
