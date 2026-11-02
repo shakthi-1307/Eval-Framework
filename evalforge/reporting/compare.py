@@ -32,3 +32,26 @@ def compare_reports(
             "delta_seconds": round(latency_delta, 4),
         },
     }
+    
+def detect_regression(
+    comparison: dict,
+    max_latency_increase: float = 0.10,
+) -> dict:
+    
+    accuracy_delta = comparison["accuracy"]["delta"]
+    latency_delta = comparison["average_execution_time"]["delta_seconds"]
+    
+    regressions = []
+    
+    if accuracy_delta < 0:
+        regressions.append("Accuracy decreased")
+        
+    if accuracy_delta > max_latency_increase:
+        regressions.append(
+            f"Latency increased by more than {max_latency_increase:.2f}s"
+        )
+        
+    return {
+        "regression_detected": bool(regressions),
+        "issues": regressions,
+    }
