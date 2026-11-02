@@ -1,0 +1,12 @@
+{
+    "dataset_name": "General Knowledge",
+    "total_tests": 3,
+    "passed_tests": 3,
+    "failed_tests": 0,
+    "accuracy": 1.0,
+    "average_execution_time": 1.06,
+    "total_execution_time": 3.1753296999959275,
+    "error_count": 0,
+    "run_id": "7d848920-7530-4b31-bfaa-54198700031e",
+    "generated_at": "2026-11-02T23:27:28.966157"
+}
