@@ -15,3 +15,12 @@ print("Comparison:")
 print(json.dumps(comparison, indent = 4))
 print("\nRegression Check:")
 print(json.dumps(regression,indent = 4))
+
+from evalforge.reporting.compare import compare_test_results
+
+test_comparison = compare_test_results(
+    baseline_path="reports/eval_20261103_131353_b86a1213.json",
+    current_path="reports/eval_20261103_131401_9ded46c9.json",
+)
+
+print(json.dumps(test_comparison, indent=4))

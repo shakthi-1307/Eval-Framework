@@ -3,6 +3,7 @@ from evalforge.metrics.execution_errors import count_execution_errors
 from datetime import datetime 
 from uuid import uuid4 
 from pydantic import BaseModel, Field 
+from evalforge.models.schemas import ExecutionResult
 
 class EvaluationReport(BaseModel):
     dataset_name:str 
@@ -15,6 +16,7 @@ class EvaluationReport(BaseModel):
     error_count: int
     run_id: str = Field(default_factory = lambda: str(uuid4()))
     generated_at: datetime = Field(default_factory = datetime.now)
+    results: list[ExecutionResult] = []
     
 def generate_report(dataset_name, results):
 
@@ -53,4 +55,5 @@ def generate_report(dataset_name, results):
         average_execution_time=average_time,
         total_execution_time=total_time,
         error_count=error_count,
+        results=results,
     )

@@ -55,3 +55,52 @@ def detect_regression(
         "regression_detected": bool(regressions),
         "issues": regressions,
     }
+    
+def compare_test_results(
+    baseline_path: str,
+    current_path: str,
+) -> list[dict]:
+    import json
+    from pathlib import Path
+
+    with Path(baseline_path).open(encoding="utf-8") as file:
+        baseline = json.load(file)
+
+    with Path(current_path).open(encoding="utf-8") as file:
+        current = json.load(file)
+
+    baseline_results = {
+        result["test_id"]: result
+        for result in baseline.get("results", [])
+    }
+
+    current_results = {
+        result["test_id"]: result
+        for result in current.get("results", [])
+    }
+
+    comparisons = []
+
+    for test_id in sorted(
+        set(baseline_results) | set(current_results)
+    ):
+        old = baseline_results.get(test_id)
+        new = current_results.get(test_id)
+
+        if old is None:
+            status = "new_test"
+        elif new is None:
+            status = "removed_test"
+        elif old.get("passed") != new.get("passed"):
+            status = "changed"
+        else:
+            status = "unchanged"
+
+        comparisons.append({
+            "test_id": test_id,
+            "baseline_passed": old.get("passed") if old else None,
+            "current_passed": new.get("passed") if new else None,
+            "status": status,
+        })
+
+    return comparisons

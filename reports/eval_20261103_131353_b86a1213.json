@@ -1,0 +1,44 @@
+{
+    "dataset_name": "General Knowledge",
+    "total_tests": 3,
+    "passed_tests": 3,
+    "failed_tests": 0,
+    "accuracy": 1.0,
+    "average_execution_time": 1.17,
+    "total_execution_time": 3.522158900042996,
+    "error_count": 0,
+    "run_id": "b86a1213-fdca-4274-8336-fb5293006855",
+    "generated_at": "2026-11-03T13:13:53.421356",
+    "results": [
+        {
+            "test_id": "TC001",
+            "input": "What is the captial of France?",
+            "actual_output": "The capital of France is **Paris**.",
+            "expected_output": "Paris",
+            "passed": true,
+            "error": null,
+            "execution_time": 1.3289531000191346,
+            "timestamp": "2026-11-03T13:13:51.227978"
+        },
+        {
+            "test_id": "TC002",
+            "input": "What is 10 multiplied by 5?",
+            "actual_output": "10 multiplied by 5 equals **50**.",
+            "expected_output": "50",
+            "passed": true,
+            "error": null,
+            "execution_time": 1.0378095000050962,
+            "timestamp": "2026-11-03T13:13:52.265669"
+        },
+        {
+            "test_id": "TC003",
+            "input": "What is the capital of Japan?",
+            "actual_output": "The capital of Japan is **Tokyo**.",
+            "expected_output": "Tokyo",
+            "passed": true,
+            "error": null,
+            "execution_time": 1.155396300018765,
+            "timestamp": "2026-11-03T13:13:53.421356"
+        }
+    ]
+}
