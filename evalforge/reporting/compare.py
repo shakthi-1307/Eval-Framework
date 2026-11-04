@@ -121,4 +121,55 @@ def compare_test_results(
 
     return comparisons
 
-def 
+def summarize_test_comparison(comparisons: list[dict]) -> dict:
+    valid_latency = [
+        item for item in comparisons
+        if item.get("current_latency") is not None
+    ]
+    
+    valid_deltas = [
+        item for item in comparisons
+        if item.get("latency_delta") is not None
+    ]
+    
+    slowest_test = (
+        max(valid_latency,key = lambda item: item["current_latency"])
+        if valid_latency else None
+    )
+    
+    largest_increase = (
+        max(valid_deltas,key = lambda item:item["latency_delta"])
+        if valid_deltas else None
+    )
+    
+    return {
+        "total_tests_compared": len(comparisons),
+        "status_changed":sum(
+            item["status"] == "changed" for item in comparisons
+        ),
+        "became_slower": sum(
+            item["latency_delta"] > 0 for item in valid_deltas
+        ),
+        "became_faster":sum(
+            item["latency_delta"] < 0 for item in valid_deltas
+        ),
+        "unchanged_latency":sum(
+            item["latency_delta"] == 0 for item in valid_deltas
+        ),
+        "slowest_test":(
+            {
+                "test_id": slowest_test["test_id"],
+                "latency_seconds": slowest_test["current_latency"],
+            }
+            if slowest_test else None
+        ),
+        "largest_latency_increase":(
+            {
+                "test_id":largest_increase["test_id"],
+                "delta_seconds": largest_increase["latency_delta"],
+            }
+            if largest_increase
+            and largest_increase["latency_delta"] > 0
+            else None
+        )
+    }

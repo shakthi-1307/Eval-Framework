@@ -24,3 +24,9 @@ test_comparison = compare_test_results(
 )
 
 print(json.dumps(test_comparison, indent=4))
+
+from evalforge.reporting.compare import summarize_test_comparison
+
+summary = summarize_test_comparison(test_comparison)
+print("\nTest Comparison Summary : ")
+print(json.dumps(summary, indent = 4))
