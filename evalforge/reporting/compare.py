@@ -101,6 +101,24 @@ def compare_test_results(
             "baseline_passed": old.get("passed") if old else None,
             "current_passed": new.get("passed") if new else None,
             "status": status,
+            "baseline_latency" : (
+                old.get("execution_time") if old else None
+            ),
+            "current_latency":(
+                new.get("execution_time") if new else None
+            ),
+            "latency_delta" : (
+                round(
+                    new["execution_time"] - old["execution_time"],
+                    4,
+                )
+                if old and new
+                and old.get("execution_time") is not None
+                and new.get("execution_time") is not None
+                else None
+            ),
         })
 
     return comparisons
+
+def 
