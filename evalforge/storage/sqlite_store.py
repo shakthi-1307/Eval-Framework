@@ -42,6 +42,62 @@ def initialize_database():
             )
         """)
         
+def save_report(report):
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute("PRAGMA foreign_keys = ON")
+        
+        conn.execute("""
+            INSERT INTO evaluation_runs (
+                run_id,
+                dataset_name,
+                generated_at,
+                total_tests,
+                passed_tests,
+                failed_tests,
+                accuracy,
+                average_execution_time,
+                total_execution_time
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            str(report.run_id),
+            report.dataset_name,
+            report.generated_at.isoformat(),
+            report.total_tests,
+            report.passed_test,
+            report.failed_tests,
+            report.accuracy,
+            report.average_execution_time,
+            report.total_execution_time,
+        ))
+        
+        for result in report.results:
+            conn.execute("""
+                INSERT INTO test_results (
+                    run_id,
+                    test_id,
+                    input,
+                    actual_output,
+                    expected_output,
+                    passed,
+                    error,
+                    execution_time,
+                    timestamp
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                str(report.run_id),
+                result.test_id,
+                result.input,
+                result.actual_output,
+                result.expected_output,
+                None if result.passed is None else int(result.passed),
+                result.error,
+                result.execution_time,
+                result.timestamp.isoformat()
+                    if result.timestamp else None,
+            ))
+            
 if __name__ == "__main__":
     initialize_database()
     print(f"Database initialized : {DB_PATH.resolve()}")
