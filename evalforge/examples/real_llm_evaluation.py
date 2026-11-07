@@ -4,6 +4,10 @@ from evalforge.core.dataset import EvaluationDataset
 from evalforge.core.runner import EvaluationRunner
 from evalforge.reporting.report import generate_report 
 from evalforge.metrics.llm_judge import llm_judge
+from evalforge.storage.sqlite_store import (
+    initialize_database,
+    save_report,
+)
 
 llm = GroqLLM()
 
@@ -49,6 +53,11 @@ report = generate_report(
     dataset.name,
     results
 )
+
+initialize_database()
+save_report(report)
+
+print("Evaluation report saved to SQLite.")
 
 for result in results:
     print(f"\nTest: {result.test_id}")

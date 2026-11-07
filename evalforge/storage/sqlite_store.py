@@ -64,7 +64,7 @@ def save_report(report):
             report.dataset_name,
             report.generated_at.isoformat(),
             report.total_tests,
-            report.passed_test,
+            report.passed_tests,
             report.failed_tests,
             report.accuracy,
             report.average_execution_time,
