@@ -122,6 +122,35 @@ def get_run_results(run_id):
         """, (run_id,)).fetchall()
         
         return [dict(row) for row in rows]
+    
+def filter_runs(
+    dataset_name = None,
+    min_accuracy = None,
+    max_accuracy = None,):
+    
+    query = "SELECT * FROM evaluation_runs WHERE 1=1"
+    params = []
+    
+    if dataset_name:
+        query += " AND dataset_name = ?"
+        params.append(dataset_name)
+        
+    if min_accuracy is not None:
+        query += " AND accuracy >= ?"
+        params.append(min_accuracy)
+    
+    if max_accuracy is not None:
+        query += " AND accuracy <= ?"
+        params.append(max_accuracy)
+        
+    query += " ORDER BY generated_at DESC"
+    
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        
+        rows = conn.execute(query,params).fetchall()
+        
+        return [dict(row) for row in rows]
             
 if __name__ == "__main__":
     initialize_database()
