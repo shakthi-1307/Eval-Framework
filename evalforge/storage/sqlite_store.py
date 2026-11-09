@@ -98,6 +98,31 @@ def save_report(report):
                     if result.timestamp else None,
             ))
             
+def get_all_runs():
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        
+        rows = conn.execute("""
+            SELECT * 
+            FROM evaluation_runs
+            ORDER BY generated_at DESC
+        """).fetchall()
+        
+        return [dict(row) for row in rows]
+    
+def get_run_results(run_id):
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        
+        rows = conn.execute("""
+            SELECT * 
+            FROM test_results
+            WHERE run_id = ?
+            ORDER BY test_id
+        """, (run_id,)).fetchall()
+        
+        return [dict(row) for row in rows]
+            
 if __name__ == "__main__":
     initialize_database()
     print(f"Database initialized : {DB_PATH.resolve()}")
